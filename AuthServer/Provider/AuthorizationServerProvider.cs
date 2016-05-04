@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Threading.Tasks;
 using System.IO;
+using System.Security.Claims;
+using Microsoft.Owin.Security;
 
 namespace AuthServer.Provider
 {
@@ -12,7 +14,8 @@ namespace AuthServer.Provider
     {
         public override Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context)
         {
-            return Task.FromResult<object>(context.Validated());
+            context.Validated("102");
+            return base.ValidateClientAuthentication(context);
         }
 
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
@@ -29,6 +32,15 @@ namespace AuthServer.Provider
             string path = @"e:\temp\MyTest.txt";
             File.WriteAllText(path, context.AccessToken);
             return base.TokenEndpointResponse(context);
+        }
+
+        public override Task GrantClientCredentials(OAuthGrantClientCredentialsContext context)
+        {
+            var oAuthIdentity = new ClaimsIdentity(context.Options.AuthenticationType);
+            oAuthIdentity.AddClaim(new Claim(ClaimTypes.Name, context.ClientId));
+            var ticket = new AuthenticationTicket(oAuthIdentity, new AuthenticationProperties());
+            context.Validated(ticket);
+            return base.GrantClientCredentials(context);
         }
     }
 }

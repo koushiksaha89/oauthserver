@@ -30,7 +30,7 @@ namespace AuthServer
                 Provider = new AuthorizationServerProvider(),
             };
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
-            app.UseOAuthBearerAuthentication(OAuthBearerOptions);
+            //app.UseOAuthBearerAuthentication(OAuthBearerOptions);
         }
     }
 }
