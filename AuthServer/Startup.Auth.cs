@@ -28,7 +28,6 @@ namespace AuthServer
                 TokenEndpointPath= new PathString("/Token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(20),
                 Provider = new AuthorizationServerProvider(),
-                AuthorizeEndpointPath = new PathString("/Authorize"),
             };
             app.UseOAuthAuthorizationServer(OAuthServerOptions);
             app.UseOAuthBearerAuthentication(OAuthBearerOptions);
